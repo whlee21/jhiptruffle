@@ -1,0 +1,26 @@
+
+{
+    "jhiptruffleApp": {
+        "pendingTransaction" : {
+            "home": {
+                "title": "Pending Transactions",
+                "createLabel": "Create a new Pending Transaction",
+                "createOrEditLabel": "Create or edit a Pending Transaction"
+            },
+            "created": "A new Pending Transaction is created with identifier {{ param }}",
+            "updated": "A Pending Transaction is updated with identifier {{ param }}",
+            "deleted": "A Pending Transaction is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Pending Transaction {{ id }}?"
+            },
+            "detail": {
+                "title": "Pending Transaction"
+            },
+            "sender": "Sender",
+            "receiver": "Receiver",
+            "tokenQuantity": "Token Quantity",
+            "transactionHash": "Transaction Hash",
+            "image": "Image"
+        }
+    }
+}

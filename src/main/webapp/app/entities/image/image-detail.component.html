@@ -1,0 +1,35 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="image">
+            <h2><span jhiTranslate="jhiptruffleApp.image.detail.title">Image</span> {{image.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="jhiptruffleApp.image.cryptoUser">Crypto User</span></dt>
+                <dd>
+                    <span>{{image.cryptoUser}}</span>
+                </dd>
+                <dt><span jhiTranslate="jhiptruffleApp.image.imageLocation">Image Location</span></dt>
+                <dd>
+                    <span>{{image.imageLocation}}</span>
+                </dd>
+                <dt><span jhiTranslate="jhiptruffleApp.image.upvoteCount">Upvote Count</span></dt>
+                <dd>
+                    <span>{{image.upvoteCount}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/image', image.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

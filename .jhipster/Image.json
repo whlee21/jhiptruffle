@@ -1,0 +1,31 @@
+{
+    "name": "Image",
+    "fields": [
+        {
+            "fieldName": "cryptoUser",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "imageLocation",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "upvoteCount",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 1
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20180705010601",
+    "entityTableName": "image",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}
