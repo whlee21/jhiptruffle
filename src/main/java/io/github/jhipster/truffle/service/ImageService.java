@@ -64,7 +64,7 @@ public class ImageService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public Optional<ImageDTO> findOne(Long id) {
+    public Optional<ImageDTO> findById(Long id) {
         log.debug("Request to get Image : {}", id);
         // FIXME: to convert more concise codes
         Optional<Image> image = imageRepository.findById(id);
@@ -80,7 +80,7 @@ public class ImageService {
      *
      * @param id the id of the entity
      */
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         log.debug("Request to delete Image : {}", id);
         imageRepository.deleteById(id);
     }

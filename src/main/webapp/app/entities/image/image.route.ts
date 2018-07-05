@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Image } from 'app/shared/model/image.model';
 import { ImageService } from './image.service';
 import { ImageComponent } from './image.component';
@@ -18,9 +19,9 @@ export class ImageResolve implements Resolve<IImage> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id).map((image: HttpResponse<Image>) => image.body);
+            return this.service.find(id).pipe(map((image: HttpResponse<Image>) => image.body));
         }
-        return Observable.of(new Image());
+        return of(new Image());
     }
 }
 

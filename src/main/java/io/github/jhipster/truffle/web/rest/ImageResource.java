@@ -80,7 +80,6 @@ public class ImageResource {
         new FileOutputStream(file.getPath()).write(decodedImage);
 
         imageDTO.setImageLocation("images/" + fileName);
-
         ImageDTO result = imageService.save(imageDTO);
         return ResponseEntity.created(new URI("/api/images/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -131,7 +130,7 @@ public class ImageResource {
     @Timed
     public ResponseEntity<ImageDTO> getImage(@PathVariable Long id) {
         log.debug("REST request to get Image : {}", id);
-        Optional<ImageDTO> image = imageService.findOne(id);
+        Optional<ImageDTO> image = imageService.findById(id);
         return ResponseUtil.wrapOrNotFound(image);
     }
 
@@ -146,7 +145,7 @@ public class ImageResource {
     public ResponseEntity<Void> deleteImage(@PathVariable Long id) {
         log.debug("REST request to delete Image : {}", id);
 
-        imageService.delete(id);
+        imageService.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }
