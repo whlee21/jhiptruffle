@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Web3Service } from 'app/util/web3.service';
-// import metacoin_artifacts = require('../../../../../../../../../build/contracts/MetaCoin.json');
-// import erc20token_artifacts = require('../../../../../../../../build/contracts/FuckToken.json');
 
-// original codes
 import metacoin_artifacts = require('../../../../../../build/contracts/MetaCoin.json');
 import erc20token_artifacts = require('../../../../../../build/contracts/FuckToken.json');
 

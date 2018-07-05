@@ -11,6 +11,7 @@ import { ImageDetailComponent } from './image-detail.component';
 import { ImageUpdateComponent } from './image-update.component';
 import { ImageDeletePopupComponent } from './image-delete-dialog.component';
 import { IImage } from 'app/shared/model/image.model';
+import { DisplayImageComponent } from 'app/entities/image/display-image/display-image.component';
 
 @Injectable({ providedIn: 'root' })
 export class ImageResolve implements Resolve<IImage> {
@@ -35,6 +36,55 @@ export const imageRoute: Routes = [
         },
         canActivate: [UserRouteAccessService]
     },
+    {
+        path: 'image/display-image',
+        component: DisplayImageComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'Display Images'
+        },
+        canActivate: [UserRouteAccessService]
+    }
+    // },
+    // {
+    //     path: 'image/:id/view',
+    //     component: ImageDetailComponent,
+    //     resolve: {
+    //         image: ImageResolve
+    //     },
+    //     data: {
+    //         authorities: ['ROLE_USER'],
+    //         pageTitle: 'jhiptruffleApp.image.home.title'
+    //     },
+    //     canActivate: [UserRouteAccessService]
+    // },
+    // {
+    //     path: 'image/new',
+    //     component: ImageUpdateComponent,
+    //     resolve: {
+    //         image: ImageResolve
+    //     },
+    //     data: {
+    //         authorities: ['ROLE_USER'],
+    //         pageTitle: 'jhiptruffleApp.image.home.title'
+    //     },
+    //     canActivate: [UserRouteAccessService]
+    // },
+    // {
+    //     path: 'image/:id/edit',
+    //     component: ImageUpdateComponent,
+    //     resolve: {
+    //         image: ImageResolve
+    //     },
+    //     data: {
+    //         authorities: ['ROLE_USER'],
+    //         pageTitle: 'jhiptruffleApp.image.home.title'
+    //     },
+    //     canActivate: [UserRouteAccessService]
+    // }
+];
+
+export const imagePopupRoute: Routes = [
     {
         path: 'image/:id/view',
         component: ImageDetailComponent,
@@ -70,10 +120,7 @@ export const imageRoute: Routes = [
             pageTitle: 'jhiptruffleApp.image.home.title'
         },
         canActivate: [UserRouteAccessService]
-    }
-];
-
-export const imagePopupRoute: Routes = [
+    },
     {
         path: 'image/:id/delete',
         component: ImageDeletePopupComponent,

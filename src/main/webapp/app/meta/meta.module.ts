@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MetaSenderComponent } from './meta-sender/meta-sender.component';
+import { RouterModule } from '@angular/router';
+import { UtilModule } from 'app/util/util.module';
+
+import { metaSenderState, MetaSenderComponent } from './';
 
 @NgModule({
-    imports: [CommonModule],
+    imports: [CommonModule, RouterModule, UtilModule, RouterModule.forChild(metaSenderState)],
     declarations: [MetaSenderComponent]
 })
 export class MetaModule {}

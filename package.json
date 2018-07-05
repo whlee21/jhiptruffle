@@ -32,7 +32,7 @@
     "rxjs-compat": "6.1.0",
     "swagger-ui": "2.2.10",
     "tslib": "1.9.0",
-    "web3": "1.0.0-beta.34",
+    "web3": "^1.0.0-beta.34",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
@@ -76,7 +76,7 @@
     "tapable": "1.0.0",
     "thread-loader": "1.1.5",
     "to-string-loader": "1.1.5",
-    "truffle-contract": "3.0.6",
+    "truffle-contract": "^3.0.6",
     "ts-loader": "4.0.1",
     "tslint": "5.9.1",
     "tslint-config-prettier": "1.9.0",

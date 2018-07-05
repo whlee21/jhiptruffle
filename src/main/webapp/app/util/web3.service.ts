@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
-import Web3 from 'web3';
-import contract = require('truffle-contract');
 import { Subject } from 'rxjs/Rx';
-// import * as Web3 from "web3";
-const contractABI = require('./erc20abi.json');
+import contract = require('truffle-contract');
+// import * as TruffleContract from 'truffle-contract';
+// import Web3 = require('web3');
+// import * as Web3 from 'web3';
+const Web3 = require('web3');
 
+declare let require: any;
 declare let window: any;
+
+const contractABI = require('./erc20abi.json');
 
 @Injectable({
     providedIn: 'root'
 })
 export class Web3Service {
-    private web3: Web3;
+    // private web3: Web3;
+    private web3: any;
     private accounts: string[];
     public ready = false;
     public MetaCoin: any;
