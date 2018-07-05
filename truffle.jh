@@ -1,0 +1,18 @@
+entity Image {
+	id Long,
+	cryptoUser String,
+    imageLocation String,
+    upvoteCount Integer min(1)
+}
+
+entity PendingTransaction {
+	id Long,
+    sender String,
+    receiver String,
+    tokenQuantity Integer,
+    transactionHash String
+}
+
+relationship ManyToOne {
+	PendingTransaction{image} to Image
+}
