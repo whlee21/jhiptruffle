@@ -1,0 +1,234 @@
+import { Injectable } from '@angular/core';
+import Web3 from 'web3';
+import contract = require('truffle-contract');
+import { Subject } from 'rxjs/Rx';
+// import * as Web3 from "web3";
+const contractABI = require('./erc20abi.json');
+
+declare let window: any;
+
+@Injectable({
+    providedIn: 'root'
+})
+export class Web3Service {
+    private web3: Web3;
+    private accounts: string[];
+    public ready = false;
+    public MetaCoin: any;
+    public accountsObservable = new Subject<string[]>();
+    public ethereumBalance;
+    private ERC20TokenABI = [
+        {
+            constant: true,
+            inputs: [],
+            name: 'name',
+            outputs: [{ name: '', type: 'string' }],
+            payable: false,
+            stateMutability: 'view',
+            type: 'function'
+        },
+        {
+            constant: false,
+            inputs: [{ name: '_spender', type: 'address' }, { name: '_value', type: 'uint256' }],
+            name: 'approve',
+            outputs: [{ name: 'success', type: 'bool' }],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'function'
+        },
+        {
+            constant: true,
+            inputs: [],
+            name: 'totalSupply',
+            outputs: [{ name: '', type: 'uint256' }],
+            payable: false,
+            stateMutability: 'view',
+            type: 'function'
+        },
+        {
+            constant: false,
+            inputs: [{ name: '_from', type: 'address' }, { name: '_to', type: 'address' }, { name: '_value', type: 'uint256' }],
+            name: 'transferFrom',
+            outputs: [{ name: 'success', type: 'bool' }],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'function'
+        },
+        {
+            constant: true,
+            inputs: [],
+            name: 'decimals',
+            outputs: [{ name: '', type: 'uint8' }],
+            payable: false,
+            stateMutability: 'view',
+            type: 'function'
+        },
+        {
+            constant: false,
+            inputs: [{ name: '_value', type: 'uint256' }],
+            name: 'burn',
+            outputs: [{ name: 'success', type: 'bool' }],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'function'
+        },
+        {
+            constant: true,
+            inputs: [],
+            name: 'standard',
+            outputs: [{ name: '', type: 'string' }],
+            payable: false,
+            stateMutability: 'view',
+            type: 'function'
+        },
+        {
+            constant: true,
+            inputs: [{ name: '', type: 'address' }],
+            name: 'balanceOf',
+            outputs: [{ name: '', type: 'uint256' }],
+            payable: false,
+            stateMutability: 'view',
+            type: 'function'
+        },
+        {
+            constant: false,
+            inputs: [{ name: '_from', type: 'address' }, { name: '_value', type: 'uint256' }],
+            name: 'burnFrom',
+            outputs: [{ name: 'success', type: 'bool' }],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'function'
+        },
+        {
+            constant: true,
+            inputs: [],
+            name: 'symbol',
+            outputs: [{ name: '', type: 'string' }],
+            payable: false,
+            stateMutability: 'view',
+            type: 'function'
+        },
+        {
+            constant: false,
+            inputs: [{ name: '_to', type: 'address' }, { name: '_value', type: 'uint256' }],
+            name: 'transfer',
+            outputs: [],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'function'
+        },
+        {
+            constant: false,
+            inputs: [{ name: '_spender', type: 'address' }, { name: '_value', type: 'uint256' }, { name: '_extraData', type: 'bytes' }],
+            name: 'approveAndCall',
+            outputs: [{ name: 'success', type: 'bool' }],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'function'
+        },
+        {
+            constant: true,
+            inputs: [{ name: '', type: 'address' }, { name: '', type: 'address' }],
+            name: 'allowance',
+            outputs: [{ name: '', type: 'uint256' }],
+            payable: false,
+            stateMutability: 'view',
+            type: 'function'
+        },
+        { inputs: [], payable: false, stateMutability: 'nonpayable', type: 'constructor' },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: true, name: 'from', type: 'address' },
+                { indexed: true, name: 'to', type: 'address' },
+                { indexed: false, name: 'value', type: 'uint256' }
+            ],
+            name: 'Transfer',
+            type: 'event'
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: true, name: 'from', type: 'address' }, { indexed: false, name: 'value', type: 'uint256' }],
+            name: 'Burn',
+            type: 'event'
+        }
+    ];
+
+    constructor() {
+        this.bootstrapWeb3();
+    }
+
+    public bootstrapWeb3() {
+        // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+        if (typeof window.web3 !== 'undefined') {
+            // Use Mist/MetaMask's provider
+            this.web3 = new Web3(window.web3.currentProvider);
+        } else {
+            console.log('No web3? You should consider trying MetaMask!');
+
+            // Hack to provide backwards compatibility for Truffle, which uses web3js 0.20.x
+            Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
+            // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+            this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+        }
+
+        setInterval(() => this.refreshAccounts(), 100);
+    }
+
+    public async artifactsToContract(artifacts) {
+        if (!this.web3) {
+            const delay = new Promise(resolve => setTimeout(resolve, 100));
+            await delay;
+            return await this.artifactsToContract(artifacts);
+        }
+
+        const contractAbstraction = contract(artifacts);
+        contractAbstraction.setProvider(this.web3.currentProvider);
+        return contractAbstraction;
+    }
+
+    private refreshAccounts() {
+        this.web3.eth.getAccounts((err, accs) => {
+            if (err != null) {
+                console.warn('There was an error fetching your accounts.');
+                return;
+            }
+
+            // Get the initial account balance so it can be displayed.
+            if (accs.length === 0) {
+                console.warn("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
+                return;
+            }
+
+            // We refresh accounts every time now
+            this.accountsObservable.next(accs);
+            this.accounts = accs;
+
+            this.ready = true;
+        });
+    }
+
+    public getEthBalance(ethaccount, callback) {
+        let that = this;
+        let weiBalance = this.web3.eth.getBalance(ethaccount).then(function(response) {
+            let returnValue = that.web3.utils.fromWei(response.toString(), 'ether');
+            callback(returnValue);
+        });
+    }
+
+    public getERC20Balance(ethaccount) {
+        const MyContract = new this.web3.eth.Contract(this.ERC20TokenABI, '0xc63e7b1dece63a77ed7e4aeef5efb3b05c81438d');
+        const decimal = MyContract.methods.decimals();
+        const balance = MyContract.methods.balanceOf(ethaccount).call();
+        return balance;
+    }
+
+    public sendEth(sender, receiver, callback) {
+        console.log('sender: ' + sender);
+        console.log('receiver: ' + receiver);
+        this.web3.eth.sendTransaction({ from: sender, to: receiver, value: 1 }).on('transactionHash', function(hash) {
+            console.log('hash: ' + hash);
+            callback(hash);
+        });
+    }
+}
