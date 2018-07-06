@@ -127,7 +127,7 @@ export class DisplayImageComponent implements OnInit, OnDestroy {
 
     refreshBalance() {
         let that = this;
-        console.log('Refreshing balance');
+        // console.log('Refreshing balance');
         try {
             this.web3Service.getEthBalance(this.ethereumModel.account, function(data) {
                 that.ethereumModel.balance = data;

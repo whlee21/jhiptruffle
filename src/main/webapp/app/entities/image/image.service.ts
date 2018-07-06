@@ -17,7 +17,13 @@ export class ImageService {
     constructor(private http: HttpClient) {}
 
     create(image: IImage): Observable<EntityResponseType> {
-        return this.http.post<IImage>(this.resourceUrl, image, { observe: 'response' });
+        const copy = this.convert(image);
+        console.log('in create', copy);
+        return this.http.post<IImage>(this.resourceUrl, copy, { observe: 'response' });
+        // return this.http.post<IImage>(this.resourceUrl, copy, { observe: 'response' }).map((res: Response) => {
+        //     const jsonResponse = res.json();
+        //     return this.convertItemFromServer(jsonResponse);
+        // });
     }
 
     update(image: IImage): Observable<EntityResponseType> {
@@ -86,16 +92,16 @@ export class ImageService {
     // /**
     //  * Convert a returned JSON object to Image.
     //  */
-    // private convertItemFromServer(json: any): IImage {
-    //     const entity: IImage = Object.assign(new Image(), json);
-    //     return entity;
-    // }
-    //
-    // /**
-    //  * Convert a Image to a JSON which can be sent to the server.
-    //  */
-    // private convert(image: IImage): IImage {
-    //     const copy: IImage = Object.assign({}, image);
-    //     return copy;
-    // }
+    private convertItemFromServer(json: any): IImage {
+        const entity: IImage = Object.assign(new Image(), json);
+        return entity;
+    }
+
+    /**
+     * Convert a Image to a JSON which can be sent to the server.
+     */
+    private convert(image: IImage): IImage {
+        const copy: IImage = Object.assign({}, image);
+        return copy;
+    }
 }

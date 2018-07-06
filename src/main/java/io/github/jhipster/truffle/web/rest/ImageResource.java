@@ -60,6 +60,7 @@ public class ImageResource {
             throw new BadRequestAlertException("A new image cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
+        log.debug("imageBase64 {}", imageDTO.getImageBase64());
         String formattedBase64Image = imageDTO.getImageBase64().split(",")[1];
         byte[] decodedImage = Base64.getDecoder().decode(formattedBase64Image);
 

@@ -11,6 +11,6 @@ export class Image implements IImage {
         public cryptoUser?: string,
         public imageLocation?: string,
         public upvoteCount?: number,
-        imageBase64?: string
+        public imageBase64?: string
     ) {}
 }
