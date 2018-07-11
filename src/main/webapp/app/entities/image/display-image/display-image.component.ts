@@ -41,16 +41,14 @@ export class DisplayImageComponent implements OnInit, OnDestroy {
     ) {}
 
     loadAll() {
-        this.imageService
-            .query()
-            .subscribe
-            // FIXME: compile error
-            // (res: ResponseWrapper) => {
-            //     this.images = res.json;
-            // },
-            // (res: ResponseWrapper) => this.onError(res.json)
-            ();
+        this.imageService.query().subscribe(res => (this.images = res.body), res => this.onError(res.body));
+        // FIXME: compile error
+        // (res: ResponseWrapper) => {
+        //     this.images = res.json;
+        // },
+        // (res: ResponseWrapper) => this.onError(res.json)
     }
+
     ngOnInit() {
         this.loadAll();
         this.principal.identity().then(account => {
@@ -126,7 +124,7 @@ export class DisplayImageComponent implements OnInit, OnDestroy {
     }
 
     refreshBalance() {
-        let that = this;
+        const that = this;
         // console.log('Refreshing balance');
         try {
             this.web3Service.getEthBalance(this.ethereumModel.account, function(data) {
@@ -142,7 +140,7 @@ export class DisplayImageComponent implements OnInit, OnDestroy {
             if (img) {
                 const sender = this.ethereumModel.account;
                 // FIXME: compile error
-                // const receiver = img.crypto_user;
+                // const receiver = img.cryptoUser;
                 // const imageId = img.id;
                 // let that = this;
                 // this.web3Service.sendEth(sender,receiver, function(newTransactionHash) {

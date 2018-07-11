@@ -24,6 +24,7 @@ import java.net.URISyntaxException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * REST controller for managing Image.
@@ -42,8 +43,8 @@ public class ImageResource {
         this.imageService = imageService;
     }
 
-    @Autowired
-    ServletContext context;
+    // @Autowired
+    // ServletContext context;
 
     /**
      * POST  /images : Create a new image.
@@ -54,7 +55,7 @@ public class ImageResource {
      */
     @PostMapping("/images")
     @Timed
-    public ResponseEntity<ImageDTO> createImage(@Valid @RequestBody ImageDTO imageDTO) throws URISyntaxException, IOException {
+    public ResponseEntity<ImageDTO> createImage(@Valid @RequestBody ImageDTO imageDTO, HttpServletRequest request) throws URISyntaxException, IOException {
         log.debug("REST request to save Image : {}", imageDTO);
         if (imageDTO.getId() != null) {
             throw new BadRequestAlertException("A new image cannot already have an ID", ENTITY_NAME, "idexists");
@@ -64,7 +65,7 @@ public class ImageResource {
         String formattedBase64Image = imageDTO.getImageBase64().split(",")[1];
         byte[] decodedImage = Base64.getDecoder().decode(formattedBase64Image);
 
-        String dirString = context.getRealPath("/")+"/images/";
+        String dirString = request.getServletContext().getRealPath("/")+"/images/";
         File directory = new File(dirString);
         if (!directory.exists()) {
             directory.mkdir();
