@@ -48,6 +48,7 @@ public class PendingTransactionScheduler {
 //                log.debug("Image to be upvoted: " + imageToBeUpvoted.toString());
 //                imageToBeUpvoted.setUpvoteCount(imageToBeUpvoted.getUpvoteCount() + 1);
 //                imageRepository.save(imageToBeUpvoted);
+                log.debug("image {}", pendingTransaction.getImage());
                 imageRepository.findById(pendingTransaction.getImage().getId()).ifPresent(imageToBeUpvoted -> {
                     log.debug("Image to be upvoted: " + imageToBeUpvoted.toString());
                     imageToBeUpvoted.setUpvoteCount(imageToBeUpvoted.getUpvoteCount() + 1);

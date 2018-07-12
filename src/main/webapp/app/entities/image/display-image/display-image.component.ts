@@ -144,8 +144,10 @@ export class DisplayImageComponent implements OnInit, OnDestroy {
                 const receiver = image.cryptoUser;
                 const imgId = image.id;
                 const that = this;
+                console.log('imageId', imageId);
+                console.log('imgId', imgId);
                 this.web3Service.sendEth(sender, receiver, function(newTransactionHash) {
-                    const newPendingTransaction = new PendingTransaction(null, sender, receiver, 1, newTransactionHash, imageId);
+                    const newPendingTransaction = new PendingTransaction(null, sender, receiver, 1, newTransactionHash, imgId);
                     that.subscribeToCreatePendingTransaction(that.pendingTransactionService.create(newPendingTransaction));
                 });
 
