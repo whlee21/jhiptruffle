@@ -6,9 +6,10 @@ import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 import { Principal } from 'app/core';
 import { Web3Service } from 'app/util/web3.service';
 import { PendingTransactionService } from 'app/entities/pending-transaction';
-import { PendingTransaction } from 'app/shared/model/pending-transaction.model';
+import { PendingTransaction, IPendingTransaction } from 'app/shared/model/pending-transaction.model';
 import { Observable } from 'rxjs/Observable';
 import { ResponseWrapper } from 'app/shared/model/response-wrapper.model';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
     selector: 'jhi-display-image',
@@ -139,6 +140,15 @@ export class DisplayImageComponent implements OnInit, OnDestroy {
         this.imageService.find(imageId).subscribe(img => {
             if (img) {
                 const sender = this.ethereumModel.account;
+                const image = img.body;
+                const receiver = image.cryptoUser;
+                const imgId = image.id;
+                const that = this;
+                this.web3Service.sendEth(sender, receiver, function(newTransactionHash) {
+                    const newPendingTransaction = new PendingTransaction(null, sender, receiver, 1, newTransactionHash, imageId);
+                    that.subscribeToCreatePendingTransaction(that.pendingTransactionService.create(newPendingTransaction));
+                });
+
                 // FIXME: compile error
                 // const receiver = img.cryptoUser;
                 // const imageId = img.id;
@@ -153,11 +163,14 @@ export class DisplayImageComponent implements OnInit, OnDestroy {
         });
     }
 
-    private subscribeToCreatePendingTransaction(result: Observable<PendingTransaction>) {
-        result.subscribe((res: PendingTransaction) => this.onSavePendingTransactionSuccess(res), (res: Response) => this.onSaveError());
+    private subscribeToCreatePendingTransaction(result: Observable<HttpResponse<IPendingTransaction>>) {
+        result.subscribe(
+            (res: HttpResponse<IPendingTransaction>) => this.onSavePendingTransactionSuccess(res),
+            (res: Response) => this.onSaveError()
+        );
     }
 
-    private onSavePendingTransactionSuccess(result: PendingTransaction) {
+    private onSavePendingTransactionSuccess(result: HttpResponse<IPendingTransaction>) {
         this.eventManager.broadcast({ name: 'pendingTransactionModification', content: 'OK' });
     }
 }

@@ -66,6 +66,7 @@ public class ImageResource {
         byte[] decodedImage = Base64.getDecoder().decode(formattedBase64Image);
 
         String dirString = request.getServletContext().getRealPath("/")+"/images/";
+        log.debug("dirString {}", dirString);
         File directory = new File(dirString);
         if (!directory.exists()) {
             directory.mkdir();
