@@ -24,7 +24,10 @@ import java.net.URISyntaxException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * REST controller for managing Image.
@@ -43,8 +46,8 @@ public class ImageResource {
         this.imageService = imageService;
     }
 
-    // @Autowired
-    // ServletContext context;
+    @Autowired
+    ServletContext context;
 
     /**
      * POST  /images : Create a new image.
@@ -55,28 +58,29 @@ public class ImageResource {
      */
     @PostMapping("/images")
     @Timed
-    public ResponseEntity<ImageDTO> createImage(@Valid @RequestBody ImageDTO imageDTO, HttpServletRequest request) throws URISyntaxException, IOException {
+    public ResponseEntity<ImageDTO> createImage(@Valid @RequestBody ImageDTO imageDTO) throws URISyntaxException, IOException {
         log.debug("REST request to save Image : {}", imageDTO);
         if (imageDTO.getId() != null) {
             throw new BadRequestAlertException("A new image cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        log.debug("imageBase64 {}", imageDTO.getImageBase64());
         String formattedBase64Image = imageDTO.getImageBase64().split(",")[1];
         byte[] decodedImage = Base64.getDecoder().decode(formattedBase64Image);
 
-        String dirString = request.getServletContext().getRealPath("/")+"/images/";
+        // String dirString = context.getRealPath("/")+"/images/";
+        String dirString = context.getResource("/").getPath() + "/images";
         log.debug("dirString {}", dirString);
         File directory = new File(dirString);
         if (!directory.exists()) {
             directory.mkdir();
         }
 
-        int num = 0;
-        String fileName = num + ".jpg";
+        UUID uuid = UUID.randomUUID();
+        String fileName = uuid.toString() + ".jpg";
         File file = new File(dirString, fileName);
         while(file.exists()) {
-            fileName = (num++) +".jpg";
+            uuid = UUID.randomUUID();
+            fileName = uuid.toString() + ".jpg";
             file = new File(dirString, fileName);
         }
 
