@@ -42,12 +42,13 @@ public class ImageResource {
 
     private final ImageService imageService;
 
-    public ImageResource(ImageService imageService) {
-        this.imageService = imageService;
-    }
+    // @Autowired
+    private final ServletContext context;
 
-    @Autowired
-    ServletContext context;
+    public ImageResource(ImageService imageService, ServletContext context) {
+        this.imageService = imageService;
+        this.context = context;
+    }
 
     /**
      * POST  /images : Create a new image.

@@ -27,8 +27,18 @@ public class ImageDTO implements Serializable {
         return cryptoUser;
     }
 
+    public ImageDTO cryptoUser(String cryptoUser) {
+        this.cryptoUser = cryptoUser;
+        return this;
+    }
+
     public void setCryptoUser(String cryptoUser) {
         this.cryptoUser = cryptoUser;
+    }
+
+    public ImageDTO imageLocation(String imageLocation) {
+        this.imageLocation = imageLocation;
+        return this;
     }
 
     public String getImageLocation() {
@@ -37,6 +47,11 @@ public class ImageDTO implements Serializable {
 
     public void setImageLocation(String imageLocation) {
         this.imageLocation = imageLocation;
+    }
+
+    public ImageDTO upvoteCount(Integer upvoteCount) {
+        this.upvoteCount = upvoteCount;
+        return this;
     }
 
     public Integer getUpvoteCount() {

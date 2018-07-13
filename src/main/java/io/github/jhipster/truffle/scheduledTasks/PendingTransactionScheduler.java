@@ -29,7 +29,7 @@ public class PendingTransactionScheduler {
         this.pendingTransactionRepository = pendingTransactionRepository;
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 3000)
     public void processPendingTransactions() throws ExecutionException, InterruptedException {
         // Retrieve pending_transaction table results
         List<PendingTransaction> pendingTransactionSchedulerList = pendingTransactionRepository.findAll();
