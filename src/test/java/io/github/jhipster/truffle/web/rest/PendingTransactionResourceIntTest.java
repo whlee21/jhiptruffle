@@ -4,6 +4,7 @@ import io.github.jhipster.truffle.JhiptruffleApp;
 
 import io.github.jhipster.truffle.domain.PendingTransaction;
 import io.github.jhipster.truffle.repository.PendingTransactionRepository;
+import io.github.jhipster.truffle.service.mapper.PendingTransactionMapper;
 import io.github.jhipster.truffle.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -54,6 +55,8 @@ public class PendingTransactionResourceIntTest {
     @Autowired
     private PendingTransactionRepository pendingTransactionRepository;
 
+    @Autowired
+    private PendingTransactionMapper pendingTransactionMapper;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -74,7 +77,7 @@ public class PendingTransactionResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PendingTransactionResource pendingTransactionResource = new PendingTransactionResource(pendingTransactionRepository);
+        final PendingTransactionResource pendingTransactionResource = new PendingTransactionResource(pendingTransactionRepository, pendingTransactionMapper);
         this.restPendingTransactionMockMvc = MockMvcBuilders.standaloneSetup(pendingTransactionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

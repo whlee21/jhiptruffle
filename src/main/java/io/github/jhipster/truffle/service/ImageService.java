@@ -44,6 +44,19 @@ public class ImageService {
     }
 
     /**
+     * Save a image.
+     *
+     * @param imageDTO the entity to save
+     * @return the persisted entity
+     */
+    public ImageDTO saveAndFlush(ImageDTO imageDTO) {
+        log.debug("Request to save Image : {}", imageDTO);
+        Image image = imageMapper.toEntity(imageDTO);
+        image = imageRepository.saveAndFlush(image);
+        return imageMapper.toDto(image);
+    }
+
+    /**
      * Get all the images.
      *
      * @return the list of entities
