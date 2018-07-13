@@ -15,6 +15,7 @@ if (project.hasProperty('no-liquibase')) {
 
 bootRun {
     args = []
+    systemProperty 'org.jboss.logging.provider', 'slf4j'
 }
 
 task webpackBuildDev(type: YarnTask) {

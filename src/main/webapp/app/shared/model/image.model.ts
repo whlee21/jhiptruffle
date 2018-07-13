@@ -6,5 +6,11 @@ export interface IImage {
 }
 
 export class Image implements IImage {
-    constructor(public id?: number, public cryptoUser?: string, public imageLocation?: string, public upvoteCount?: number) {}
+    constructor(
+        public id?: number,
+        public cryptoUser?: string,
+        public imageLocation?: string,
+        public upvoteCount?: number,
+        public imageBase64?: string
+    ) {}
 }

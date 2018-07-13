@@ -3,6 +3,8 @@ package io.github.jhipster.truffle.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.truffle.domain.PendingTransaction;
 import io.github.jhipster.truffle.repository.PendingTransactionRepository;
+import io.github.jhipster.truffle.service.dto.PendingTransactionDTO;
+import io.github.jhipster.truffle.service.mapper.PendingTransactionMapper;
 import io.github.jhipster.truffle.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.truffle.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -29,9 +31,12 @@ public class PendingTransactionResource {
     private static final String ENTITY_NAME = "pendingTransaction";
 
     private final PendingTransactionRepository pendingTransactionRepository;
+    private final PendingTransactionMapper pendingTransactionMapper;
 
-    public PendingTransactionResource(PendingTransactionRepository pendingTransactionRepository) {
+    public PendingTransactionResource(PendingTransactionRepository pendingTransactionRepository,
+                                      PendingTransactionMapper pendingTransactionMapper) {
         this.pendingTransactionRepository = pendingTransactionRepository;
+        this.pendingTransactionMapper = pendingTransactionMapper;
     }
 
     /**
@@ -43,12 +48,14 @@ public class PendingTransactionResource {
      */
     @PostMapping("/pending-transactions")
     @Timed
-    public ResponseEntity<PendingTransaction> createPendingTransaction(@RequestBody PendingTransaction pendingTransaction) throws URISyntaxException {
-        log.debug("REST request to save PendingTransaction : {}", pendingTransaction);
-        if (pendingTransaction.getId() != null) {
+    public ResponseEntity<PendingTransactionDTO> createPendingTransaction(@RequestBody PendingTransactionDTO pendingTransactionDTO) throws URISyntaxException {
+        log.debug("REST request to save PendingTransaction : {}", pendingTransactionDTO);
+        if (pendingTransactionDTO.getId() != null) {
             throw new BadRequestAlertException("A new pendingTransaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        PendingTransaction result = pendingTransactionRepository.save(pendingTransaction);
+        PendingTransaction pendingTransaction = pendingTransactionMapper.toEntity(pendingTransactionDTO);
+        pendingTransaction = pendingTransactionRepository.save(pendingTransaction);
+        PendingTransactionDTO result = pendingTransactionMapper.toDto(pendingTransaction);
         return ResponseEntity.created(new URI("/api/pending-transactions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -65,12 +72,14 @@ public class PendingTransactionResource {
      */
     @PutMapping("/pending-transactions")
     @Timed
-    public ResponseEntity<PendingTransaction> updatePendingTransaction(@RequestBody PendingTransaction pendingTransaction) throws URISyntaxException {
-        log.debug("REST request to update PendingTransaction : {}", pendingTransaction);
-        if (pendingTransaction.getId() == null) {
+    public ResponseEntity<PendingTransactionDTO> updatePendingTransaction(@RequestBody PendingTransactionDTO pendingTransactionDTO) throws URISyntaxException {
+        log.debug("REST request to update PendingTransaction : {}", pendingTransactionDTO);
+        if (pendingTransactionDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        PendingTransaction result = pendingTransactionRepository.save(pendingTransaction);
+        PendingTransaction pendingTransaction = pendingTransactionMapper.toEntity(pendingTransactionDTO);
+        pendingTransaction = pendingTransactionRepository.save(pendingTransaction);
+        PendingTransactionDTO result = pendingTransactionMapper.toDto(pendingTransaction);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, pendingTransaction.getId().toString()))
             .body(result);
@@ -83,9 +92,10 @@ public class PendingTransactionResource {
      */
     @GetMapping("/pending-transactions")
     @Timed
-    public List<PendingTransaction> getAllPendingTransactions() {
+    public List<PendingTransactionDTO> getAllPendingTransactions() {
         log.debug("REST request to get all PendingTransactions");
-        return pendingTransactionRepository.findAll();
+        List<PendingTransaction> pendingTransactions = pendingTransactionRepository.findAll();
+        return pendingTransactionMapper.toDto(pendingTransactions);
     }
 
     /**
@@ -96,10 +106,16 @@ public class PendingTransactionResource {
      */
     @GetMapping("/pending-transactions/{id}")
     @Timed
-    public ResponseEntity<PendingTransaction> getPendingTransaction(@PathVariable Long id) {
+    public ResponseEntity<PendingTransactionDTO> getPendingTransaction(@PathVariable Long id) {
         log.debug("REST request to get PendingTransaction : {}", id);
         Optional<PendingTransaction> pendingTransaction = pendingTransactionRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(pendingTransaction);
+        Optional<PendingTransactionDTO> pendingTransactionDTO;
+        if (pendingTransaction.isPresent()) {
+            pendingTransactionDTO = Optional.of(pendingTransactionMapper.toDto(pendingTransaction.get()));
+        } else {
+            pendingTransactionDTO = Optional.empty();
+        }
+        return ResponseUtil.wrapOrNotFound(pendingTransactionDTO);
     }
 
     /**

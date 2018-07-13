@@ -18,6 +18,7 @@ import { JhiptruffleAccountModule } from './account/account.module';
 import { JhiptruffleEntityModule } from './entities/entity.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
+import { MetaModule } from 'app/meta/meta.module';
 
 @NgModule({
     imports: [
@@ -28,7 +29,8 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
         JhiptruffleCoreModule,
         JhiptruffleHomeModule,
         JhiptruffleAccountModule,
-        JhiptruffleEntityModule
+        JhiptruffleEntityModule,
+        MetaModule
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],

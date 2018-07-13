@@ -130,6 +130,12 @@ configurations {
     compile.exclude module: "spring-boot-starter-tomcat"
 }
 
+configurations.all {
+    exclude group: "org.slf4j", module: "slf4j-log4j12"
+    exclude group: "log4j", module: "log4j"
+    exclude group: "commons-logging", module: "commons-logging"
+}
+
 repositories {
     mavenLocal()
     jcenter()
@@ -193,6 +199,7 @@ dependencies {
     compile "io.springfox:springfox-bean-validators"
     compile "org.mariadb.jdbc:mariadb-java-client"
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
+    compile "org.web3j:core:${web3j_version}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     annotationProcessor "org.hibernate:hibernate-jpamodelgen"
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor") {

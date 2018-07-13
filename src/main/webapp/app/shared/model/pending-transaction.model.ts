@@ -16,6 +16,6 @@ export class PendingTransaction implements IPendingTransaction {
         public receiver?: string,
         public tokenQuantity?: number,
         public transactionHash?: string,
-        public image?: IImage
+        public imageId?: number
     ) {}
 }
