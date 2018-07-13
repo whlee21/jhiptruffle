@@ -9,6 +9,7 @@ import { ImageService } from './image.service';
 import { Web3Service } from 'app/util/web3.service';
 import { ResponseWrapper } from 'app/shared/model/response-wrapper.model';
 import { Observable } from 'rxjs/Observable';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'jhi-image',
@@ -79,7 +80,8 @@ export class ImageComponent implements OnInit, OnDestroy {
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
         private principal: Principal,
-        private web3Service: Web3Service
+        private web3Service: Web3Service,
+        private router: Router
     ) {}
 
     loadAll() {
@@ -114,7 +116,7 @@ export class ImageComponent implements OnInit, OnDestroy {
     }
 
     refreshBalance() {
-        let that = this;
+        const that = this;
         try {
             this.web3Service.getEthBalance(this.ethereumModel.account, function(data) {
                 that.ethereumModel.balance = data;
@@ -175,6 +177,7 @@ export class ImageComponent implements OnInit, OnDestroy {
 
     private onSaveSuccess(result: HttpResponse<IImage>) {
         this.eventManager.broadcast({ name: 'imageListModification', content: 'OK' });
+        this.router.navigate(['/image/display-image']);
     }
 
     private onSaveError() {}

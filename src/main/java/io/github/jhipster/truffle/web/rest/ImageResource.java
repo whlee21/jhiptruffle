@@ -67,9 +67,7 @@ public class ImageResource {
         String formattedBase64Image = imageDTO.getImageBase64().split(",")[1];
         byte[] decodedImage = Base64.getDecoder().decode(formattedBase64Image);
 
-        // String dirString = context.getRealPath("/")+"/images/";
-        String dirString = context.getResource("/").getPath() + "/images";
-        log.debug("dirString {}", dirString);
+        String dirString = context.getRealPath("/")+"/images/";
         File directory = new File(dirString);
         if (!directory.exists()) {
             directory.mkdir();
