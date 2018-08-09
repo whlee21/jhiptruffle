@@ -222,7 +222,8 @@ export class Web3Service {
     }
 
     public getERC20Balance(ethaccount) {
-        const MyContract = new this.web3.eth.Contract(this.ERC20TokenABI, '0xafff709e6c5162b15a64b20d8b8c2d0fc9d8ba20');
+        const MyContract = new this.web3.eth.Contract(this.ERC20TokenABI, '0xda43a1bf25d7b67cf75d3582914e89822a55576b');
+
         const decimal = MyContract.methods.decimals();
         const balance = MyContract.methods.balanceOf(ethaccount).call();
         return balance;
