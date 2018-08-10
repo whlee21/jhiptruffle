@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { UserRouteAccessService } from 'app/core';
 
 import { metaSenderRoute } from './';
 
