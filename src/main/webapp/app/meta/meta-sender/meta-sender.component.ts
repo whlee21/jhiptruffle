@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Web3Service } from 'app/util/web3.service';
 
-import metacoin_artifacts = require('../../../../../../build/contracts/MetaCoin.json');
-import erc20token_artifacts = require('../../../../../../build/contracts/FuckToken.json');
+// import metacoin_artifacts = require('../../../../../../build/contracts/MetaCoin.json');
+// import erc20token_artifacts = require('../../../../../../build/contracts/FuckToken.json');
+import metacoin_artifacts = require('../../../../../../build/contracts/MyBasicToken.json');
+import erc20token_artifacts = require('../../../../../../build/contracts/SimpleToken.json');
 
 @Component({
     selector: 'jhi-meta-sender',
@@ -100,23 +102,23 @@ export class MetaSenderComponent implements OnInit {
         console.log('Refreshing balance');
         const that = this;
 
-        console.log('whlee21 0', this.model.account);
+        // console.log('whlee21 0', this.model.account);
         try {
             this.web3Service.getEthBalance(this.model.account, function(data) {
                 that.ethereumModel.balance = data;
             });
-            console.log(
-                'whlee21 1',
-                this.ethereumModel.account,
-                this.ethereumModel.amount,
-                this.ethereumModel.balance,
-                this.ethereumModel.receiver
-            );
+            // console.log(
+            //     'whlee21 1',
+            //     this.ethereumModel.account,
+            //     this.ethereumModel.amount,
+            //     this.ethereumModel.balance,
+            //     this.ethereumModel.receiver
+            // );
             this.ERC20Model.balance = await this.web3Service.getERC20Balance(this.model.account);
 
-            console.log('whlee21 2');
+            // console.log('whlee21 2');
             const deployedERC20Coin = await this.ERC20Token.deployed();
-            console.log('whlee21 3');
+            // console.log('whlee21 3');
             const ERC20TokenBalance = await deployedERC20Coin.balanceOf.call(this.model.account);
             console.log('Found ERC20 token balance: ' + ERC20TokenBalance);
             this.ERC20Model.balance = ERC20TokenBalance;

@@ -34,7 +34,7 @@ contract FuckToken {
         if (balanceOf[_to] + _value < balanceOf[_to]) revert(); // Check for overflows
         balanceOf[msg.sender] -= _value;                        // Subtract from the sender
         balanceOf[_to] += _value;                               // Add the same to the recipient
-        Transfer(msg.sender, _to, _value);                      // Notify anyone listening that this transfer took place
+        emit Transfer(msg.sender, _to, _value);                      // Notify anyone listening that this transfer took place
     }
 
     /* Allow another contract to spend some tokens on my behalf */
@@ -64,7 +64,7 @@ contract FuckToken {
         balanceOf[_from] -= _value;                              // Subtract from the sender
         balanceOf[_to] += _value;                                // Add the same to the recipient
         allowance[_from][msg.sender] -= _value;
-        Transfer(_from, _to, _value);
+        emit Transfer(_from, _to, _value);
         return true;
     }
 
@@ -73,7 +73,7 @@ contract FuckToken {
         if (balanceOf[msg.sender] < _value) revert();            // Check if the sender has enough
         balanceOf[msg.sender] -= _value;                         // Subtract from the sender
         totalSupply -= _value;                                   // Updates totalSupply
-        Burn(msg.sender, _value);
+        emit Burn(msg.sender, _value);
         return true;
     }
 
@@ -83,7 +83,7 @@ contract FuckToken {
         if (_value > allowance[_from][msg.sender]) revert();    // Check allowance
         balanceOf[_from] -= _value;                             // Subtract from the sender
         totalSupply -= _value;                                  // Updates totalSupply
-        Burn(_from, _value);
+        emit Burn(_from, _value);
         return true;
     }
 }
