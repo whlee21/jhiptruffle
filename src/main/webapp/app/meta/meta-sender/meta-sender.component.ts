@@ -98,14 +98,25 @@ export class MetaSenderComponent implements OnInit {
 
     async refreshBalance() {
         console.log('Refreshing balance');
+        const that = this;
 
+        console.log('whlee21 0', this.model.account);
         try {
             this.web3Service.getEthBalance(this.model.account, function(data) {
-                this.ethereumModel.balance = data;
+                that.ethereumModel.balance = data;
             });
+            console.log(
+                'whlee21 1',
+                this.ethereumModel.account,
+                this.ethereumModel.amount,
+                this.ethereumModel.balance,
+                this.ethereumModel.receiver
+            );
             this.ERC20Model.balance = await this.web3Service.getERC20Balance(this.model.account);
 
+            console.log('whlee21 2');
             const deployedERC20Coin = await this.ERC20Token.deployed();
+            console.log('whlee21 3');
             const ERC20TokenBalance = await deployedERC20Coin.balanceOf.call(this.model.account);
             console.log('Found ERC20 token balance: ' + ERC20TokenBalance);
             this.ERC20Model.balance = ERC20TokenBalance;
