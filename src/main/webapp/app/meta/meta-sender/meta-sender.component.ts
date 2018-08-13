@@ -118,13 +118,14 @@ export class MetaSenderComponent implements OnInit {
 
             // console.log('whlee21 2');
             const deployedERC20Coin = await this.ERC20Token.deployed();
-            // console.log('whlee21 3');
-            const ERC20TokenBalance = await deployedERC20Coin.balanceOf.call(this.model.account);
+            console.log('whlee21 deployedERC20Coin', deployedERC20Coin);
+            // const ERC20TokenBalance = await deployedERC20Coin.balanceOf.call(this.model.account);
+            const ERC20TokenBalance = await deployedERC20Coin.methods.balanceOf(this.model.account).call();
             console.log('Found ERC20 token balance: ' + ERC20TokenBalance);
             this.ERC20Model.balance = ERC20TokenBalance;
 
             const deployedMetaCoin = await this.MetaCoin.deployed();
-            const metaCoinBalance = await deployedMetaCoin.getBalance.call(this.model.account);
+            const metaCoinBalance = await deployedMetaCoin.methods.getBalance(this.model.account).call();
             console.log('Found balance: ' + metaCoinBalance);
             this.model.balance = metaCoinBalance;
         } catch (e) {
