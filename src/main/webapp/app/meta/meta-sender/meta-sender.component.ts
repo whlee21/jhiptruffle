@@ -3,7 +3,7 @@ import { Web3Service } from 'app/util/web3.service';
 
 // import metacoin_artifacts = require('../../../../../../build/contracts/MetaCoin.json');
 // import erc20token_artifacts = require('../../../../../../build/contracts/FuckToken.json');
-import metacoin_artifacts = require('../../../../../../build/contracts/MyBasicToken.json');
+import metacoin_artifacts = require('../../../../../../build/contracts/MetaCoin.json');
 import erc20token_artifacts = require('../../../../../../build/contracts/SimpleToken.json');
 
 @Component({
@@ -71,7 +71,8 @@ export class MetaSenderComponent implements OnInit {
     }
 
     async sendCoin() {
-        if (!this.MetaCoin) {
+        // if (!this.MetaCoin) {
+        if (!this.ERC20Token) {
             this.setStatus('Metacoin is not loaded, unable to send transaction');
             return;
         }
@@ -79,12 +80,15 @@ export class MetaSenderComponent implements OnInit {
         const amount = this.model.amount;
         const receiver = this.model.receiver;
 
-        console.log('Sending coins' + amount + ' to ' + receiver);
+        console.log('Sending tokens ' + amount + ' to ' + receiver);
 
         this.setStatus('Initiating transaction... (please wait)');
         try {
-            const deployedMetaCoin = await this.MetaCoin.deployed();
-            const transaction = await deployedMetaCoin.sendCoin.sendTransaction(receiver, amount, { from: this.model.account });
+            // const deployedMetaCoin = await this.MetaCoin.deployed();
+            const deployedERC20Token = await this.ERC20Token.deployed();
+            // const transaction = await deployedMetaCoin.sendCoin.sendTransaction(receiver, amount, { from: this.model.account });
+            // const transaction = await deployedERC20Token.transferFrom(this.model.account, receiver, amount);
+            const transaction = await deployedERC20Token.transferFrom('0xf78b19283bd210128b77ab7930ef4d8dbc3b5f93', receiver, amount);
 
             if (!transaction) {
                 this.setStatus('Transaction failed!');
@@ -99,7 +103,7 @@ export class MetaSenderComponent implements OnInit {
     }
 
     async refreshBalance() {
-        console.log('Refreshing balance');
+        // console.log('Refreshing balance');
         const that = this;
 
         // console.log('whlee21 0', this.model.account);
@@ -118,16 +122,17 @@ export class MetaSenderComponent implements OnInit {
 
             // console.log('whlee21 2');
             const deployedERC20Coin = await this.ERC20Token.deployed();
-            console.log('whlee21 deployedERC20Coin', deployedERC20Coin);
-            // const ERC20TokenBalance = await deployedERC20Coin.balanceOf.call(this.model.account);
-            const ERC20TokenBalance = await deployedERC20Coin.methods.balanceOf(this.model.account).call();
-            console.log('Found ERC20 token balance: ' + ERC20TokenBalance);
+            // console.log('whlee21 deployedERC20Coin', deployedERC20Coin);
+            const ERC20TokenBalance = await deployedERC20Coin.balanceOf(this.model.account);
+            // console.log('Found ERC20 token balance: ' + ERC20TokenBalance);
             this.ERC20Model.balance = ERC20TokenBalance;
 
-            const deployedMetaCoin = await this.MetaCoin.deployed();
-            const metaCoinBalance = await deployedMetaCoin.methods.getBalance(this.model.account).call();
-            console.log('Found balance: ' + metaCoinBalance);
-            this.model.balance = metaCoinBalance;
+            // const deployedMetaCoin = await this.MetaCoin.deployed();
+            // console.log('whlee21 deployedMetaCoin', deployedMetaCoin);
+            // const metaCoinBalance = await deployedMetaCoin.methods.getBalance(this.model.account).call();
+            // const metaCoinBalance = await deployedMetaCoin.getBalance(this.model.account);
+            // console.log('Found balance: ' + metaCoinBalance);
+            // this.model.balance = metaCoinBalance;
         } catch (e) {
             console.log(e);
             this.setStatus('Error getting balance; see log.');
