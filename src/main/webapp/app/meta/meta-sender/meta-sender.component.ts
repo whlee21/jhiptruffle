@@ -3,7 +3,7 @@ import { Web3Service } from 'app/util/web3.service';
 
 // import metacoin_artifacts = require('../../../../../../build/contracts/MetaCoin.json');
 // import erc20token_artifacts = require('../../../../../../build/contracts/FuckToken.json');
-import metacoin_artifacts = require('../../../../../../build/contracts/MetaCoin.json');
+import metacoin_artifacts = require('../../../../../../build/contracts/MyBasicToken.json');
 import erc20token_artifacts = require('../../../../../../build/contracts/SimpleToken.json');
 
 @Component({
@@ -80,7 +80,7 @@ export class MetaSenderComponent implements OnInit {
         const amount = this.model.amount;
         const receiver = this.model.receiver;
 
-        console.log('Sending tokens ' + amount + ' to ' + receiver);
+        console.log('Sending ' + amount + ' ether to ' + receiver);
 
         this.setStatus('Initiating transaction... (please wait)');
         try {
@@ -88,7 +88,13 @@ export class MetaSenderComponent implements OnInit {
             const deployedERC20Token = await this.ERC20Token.deployed();
             // const transaction = await deployedMetaCoin.sendCoin.sendTransaction(receiver, amount, { from: this.model.account });
             // const transaction = await deployedERC20Token.transferFrom(this.model.account, receiver, amount);
-            const transaction = await deployedERC20Token.transferFrom('0xf78b19283bd210128b77ab7930ef4d8dbc3b5f93', receiver, amount);
+            const transaction = await deployedERC20Token.transferFrom(
+                '0xd05d5010e00dad8053d546b0f2b3ede5e1fe32e5',
+                this.model.account,
+                amount
+            );
+
+            // this.web3Service.sendEth(this.model.account, this.model.receiver, this.model.amount, function(hash) { });
 
             if (!transaction) {
                 this.setStatus('Transaction failed!');
@@ -120,12 +126,12 @@ export class MetaSenderComponent implements OnInit {
             // );
             this.ERC20Model.balance = await this.web3Service.getERC20Balance(this.model.account);
 
-            // console.log('whlee21 2');
-            const deployedERC20Coin = await this.ERC20Token.deployed();
+            // console.log('whlee21 2', this.ERC20Model.balance);
+            // const deployedERC20Coin = await this.ERC20Token.deployed();
             // console.log('whlee21 deployedERC20Coin', deployedERC20Coin);
-            const ERC20TokenBalance = await deployedERC20Coin.balanceOf(this.model.account);
+            // const ERC20TokenBalance = await deployedERC20Coin.balanceOf(this.model.account);
             // console.log('Found ERC20 token balance: ' + ERC20TokenBalance);
-            this.ERC20Model.balance = ERC20TokenBalance;
+            // this.ERC20Model.balance = ERC20TokenBalance;
 
             // const deployedMetaCoin = await this.MetaCoin.deployed();
             // console.log('whlee21 deployedMetaCoin', deployedMetaCoin);

@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/token/ERC20/BasicToken.sol";
+import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/BasicToken.sol";
 
 contract MyBasicToken is BasicToken {
     uint8 public constant decimals = 18;
