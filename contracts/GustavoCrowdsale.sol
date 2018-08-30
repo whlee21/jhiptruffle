@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "./SimpleToken.sol";
+import "./GustavoToken.sol";
 import "openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol";
 import "openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol";
 
