@@ -6,7 +6,7 @@ import "openzeppelin-solidity/contracts/crowdsale/distribution/RefundableCrowdsa
 import "openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol";
 import "openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol";
 
-contract SimpleCrowdsale is Crowdsale, Ownable {
+contract SimpleCrowdsale is CappedCrowdsale, RefundableCrowdsale, MintedCrowdsale {
 
     // ICO Stage
     // ============
@@ -32,14 +32,14 @@ contract SimpleCrowdsale is Crowdsale, Ownable {
 
     // Events
     event EthTransferred(string text);
-    // event EthRefunded(string text);
+    event EthRefunded(string text);
 
 
     // Constructor
     // ============
     constructor(uint256 _openingTime, uint256 _closingTime, uint256 _rate, address _wallet, uint256 _goal, uint256 _cap, MintableToken _token)
-        Crowdsale(_rate, _wallet, _token) public {
-        // require(_goal <= _cap);
+        CappedCrowdsale(_cap) FinalizableCrowdsale() RefundableCrowdsale(_goal) TimedCrowdsale(_openingTime, _closingTime) Crowdsale(_rate, _wallet, _token) public {
+        require(_goal <= _cap);
     }
     // =============
 
@@ -83,7 +83,7 @@ contract SimpleCrowdsale is Crowdsale, Ownable {
 
     // Token Purchase
     // =========================
-/*     function () external payable {
+    function () external payable {
         uint256 tokensThatWillBeMintedAfterPurchase = msg.value.mul(rate);
         if ((stage == CrowdsaleStage.PreICO) && (token.totalSupply() + tokensThatWillBeMintedAfterPurchase > totalTokensForSaleDuringPreICO)) {
             msg.sender.transfer(msg.value); // Refund them
@@ -96,9 +96,9 @@ contract SimpleCrowdsale is Crowdsale, Ownable {
         if (stage == CrowdsaleStage.PreICO) {
             totalWeiRaisedDuringPreICO = totalWeiRaisedDuringPreICO.add(msg.value);
         }
-    } */
+    }
 
-/*     function forwardFunds() internal {
+    function forwardFunds() internal {
         if (stage == CrowdsaleStage.PreICO) {
             wallet.transfer(msg.value);
             emit EthTransferred("forwarding funds to wallet");
@@ -106,13 +106,13 @@ contract SimpleCrowdsale is Crowdsale, Ownable {
             emit EthTransferred("forwarding funds to refundable vault");
             super._forwardFunds();
         }
-    } */
+    }
     // ===========================
 
     // Finish: Mint Extra Tokens as needed before finalizing the Crowdsale.
     // ====================================================================
 
-/*     function finish(address _teamFund, address _ecosystemFund, address _bountyFund) public onlyOwner {
+    function finish(address _teamFund, address _ecosystemFund, address _bountyFund) public onlyOwner {
 
         require(!isFinalized);
         uint256 alreadyMinted = token.totalSupply();
@@ -123,16 +123,16 @@ contract SimpleCrowdsale is Crowdsale, Ownable {
             tokensForEcosystem = tokensForEcosystem + unsoldTokens;
         }
 
-        super._deliverTokens(_teamFund, tokensForTeam);
-        super._deliverTokens(_ecosystemFund, tokensForEcosystem);
-        super._deliverTokens(_bountyFund, tokensForBounty);
+        super._deliverTokens(_teamFund,tokensForTeam);
+        super._deliverTokens(_ecosystemFund,tokensForEcosystem);
+        super._deliverTokens(_bountyFund,tokensForBounty);
         finalize();
-    } */
+    }
     // ===============================
 
     // REMOVE THIS FUNCTION ONCE YOU ARE READY FOR PRODUCTION
     // USEFUL FOR TESTING `finish()` FUNCTION
-/*     function hasEnded() public view returns (bool) {
+    function hasEnded() public view returns (bool) {
         return true;
-    } */
+    }
 }

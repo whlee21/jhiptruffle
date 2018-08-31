@@ -15,7 +15,7 @@ module.exports = deployer => {
     const rateSimple = new web3.BigNumber(5);
 
     const walletGustavo = '0xDdD85AAe484510943831c4f5f5f04b0BC41392b1';
-    // const wallet = '0x46752fc25d1BFE38c0966677B0a9190587b340b5';
+    // const walletSimple = '0x46752fc25d1BFE38c0966677B0a9190587b340b5';
     const walletSimple = '0xB1da708E9c1848938105deb0e7ac0BE7f0c11469';
 
 

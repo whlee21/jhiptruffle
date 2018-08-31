@@ -16,7 +16,7 @@ contract('GustavoCrowdsale', function(accounts) {
             const tokenAddress = await instance.token.call();
             const simpleToken = GustavoToken.at(tokenAddress);
             const tokenAmount = await simpleToken.balanceOf(accounts[2]);
-            assert.equal(tokenAmount.toNumber(), 5000000000000000000, 'The sender didn\'t receive the tokens as per PreICO rate');
+            assert.equal(tokenAmount.toNumber(), 5000000000000000000000, 'The sender didn\'t receive the tokens as per PreICO rate');
             done();
        });
     });

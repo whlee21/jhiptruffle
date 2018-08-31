@@ -15,7 +15,7 @@ purchaser = web3.eth.accounts[2]
 GustavoCrowdsale.deployed().then(inst => { crowdsale = inst })
 crowdsale.token().then(addr => { tokenAddress = addr } )
 tokenAddress
-tokenInstance = SimpleToken.at(tokenAddress)
+tokenInstance = GustavoToken.at(tokenAddress)
 tokenInstance.transferOwnership(crowdsale.address)
 tokenInstance.balanceOf(purchaser).then(balance => balance.toString(10))
 GustavoCrowdsale.deployed().then(inst => inst.sendTransaction({ from: purchaser, value: web3.toWei(5, "ether")}))
